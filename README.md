@@ -1,6 +1,7 @@
 # Table of Contents
 1. [Introduction](README.md#introduction)
-2. [Challenge summary](README.md#challenge-summary)
+2. [Input Data](README.md#input-data)
+
 3. [Details of challenge](README.md#details-of-challenge)
 4. [Input files](README.md#input-files)
 5. [Output file](README.md#output-file)
@@ -13,12 +14,26 @@
 12. [FAQ](README.md#faq)
 
 # Introduction
-This was a Coding Challenge I participated in for the [Insight Data Engineering Program](http://xyz.insightdatascience.com/Insight_Data_Engineering_White_Paper.pdf). Here is the description:
->You’re a data engineer working for political consultants whose clients are cash-strapped >political candidates. They've asked for help analyzing loyalty trends in campaign >contributions, namely identifying areas of repeat donors and calculating how much they're >spending.
->The Federal Election Commission regularly publishes campaign contributions, and while you >don’t want to pull specific donors from those files — because using that information for >fundraising or commercial purposes is illegal — you want to identify areas (zip codes) that >could be sources of repeat campaign contributions.
+This was a Coding Challenge I participated in for the [Insight Data Engineering Program](http://xyz.insightdatascience.com/Insight_Data_Engineering_White_Paper.pdf).
+Here is the description:
+>You’re a data engineer working for political consultants whose clients are cash-strapped political candidates. They've asked for help analyzing loyalty trends in campaign contributions, namely identifying areas of repeat donors and calculating how much they're spending.
+The Federal Election Commission regularly publishes campaign contributions, and while you don’t want to pull specific donors from those files — because using that information for fundraising or commercial purposes is illegal — you want to identify areas (zip codes) that could be sources of repeat campaign contributions.
+
+I completed the challenge in about 2 days (after uselessly procrastinating the other 4). It was extremely difficult at times, and deceptively simple during others but I really enjoyed the challenge of writing a program with a plausible real world application! Below are some details, and a general breakdown of how I did it.
 
 
+# Input Data
+The [first file](donation-analytics/input/itcont.txt) given was a log of all donors and their contributions, etc. Each record contained:
+* `CMTE_ID`: identifies the flier, which for our purposes is the recipient of this contribution
+* `NAME`: name of the donor
+* `ZIP_CODE`:  zip code of the contributor (we only want the first five digits/characters)
+* `TRANSACTION_DT`: date of the transaction
+* `TRANSACTION_AMT`: amount of the transaction
+* `OTHER_ID`: a field that denotes whether contribution came from a person or an entity
 
+Along with a bunch of other data like Name (LAST, FIRST), Employer, Occupation, and a bunch of other things we can ignore. All the data conformed to the style of the [FEC Data Dictionary](https://classic.fec.gov/finance/disclosure/metadata/DataDictionaryContributionsbyIndividuals.shtml). You can also download a sample data set to play with [here](https://classic.fec.gov/finance/disclosure/metadata/DataDictionaryContributionsbyIndividuals.shtml) **NOTE: Only the sets labeled 'Contributions By Individuals' will work with this program.**
+
+Along
 
 # Challenge summary
 
