@@ -74,47 +74,46 @@ def infoParse(filename):
 
 def repeatDonors(dupeList):
         # Here we want to identify repeat donors giving to the SAME RECIPIENT (CMTE_ID) from the SAME ZIP CODE (ZIP_CODE) in the SAME CALENDAR YEAR (TRANSACTION_DATE)
-        # OUTPUT CMTE_ID | ZIPCODE | CALENDAR YEAR | PERCENTILE | TOTAL CONTRIBUTION AMOUNTS | # OF CONTRIBUTIONS THAT MATCH (CMTE_ID, ZIP_CODE, YYYY)
+        # OUTPUT: CMTE_ID | ZIPCODE | CALENDAR YEAR (YYYY) | PERCENTILE | TOTAL CONTRIBUTION AMOUNTS | # OF CONTRIBUTIONS THAT MATCH (CMTE_ID, ZIP_CODE, YYYY)
 
     numOfRepeatDonors = 1
-    transaction_amounts = {} #transaction amounts and number of donors are stored together
-    transaction_amounts_list = []
-    zipcodes = {} #zipcodes and their number of donors are stored in dictionary data structure
+    transaction_amounts = {} #transaction amounts and number of donors are stored together so they can be added for a total
+    transaction_amounts_list = [] #list of transaction amounts for calculating the percentile
+    zipcodes = {} #zipcodes and their number of donors are stored together so the number of repeat donors from a ZIPCODE can be counted
     i = 0
-    while i < len(dupeList):
-        if duplicate_donor_cmte_ID.count(duplicate_donor_cmte_ID[i]) > 1 and duplicate_donor_zipCode.count(duplicate_donor_zipCode[i]) > 1 and duplicate_donor_transaction_dt.count(duplicate_donor_transaction_dt[i]) > 1: # Same CTMID && ZIP CODE
 
-            if duplicate_donor_zipCode[i] not in zipcodes: #this if/else statement checks if a zipcode already has a donation listed. If so, it will update the number of donors + 1
+    f = open(filename_output, 'w') #opens the repeat_donors.txt file
+    while i < len(dupeList):
+
+        # Same CTMID && ZIP CODE && YEAR (transaction_date)
+        if duplicate_donor_cmte_ID.count(duplicate_donor_cmte_ID[i]) > 1 and duplicate_donor_zipCode.count(duplicate_donor_zipCode[i]) > 1 and duplicate_donor_transaction_dt.count(duplicate_donor_transaction_dt[i]) > 1:
+
+            #this if/else statement checks if a zipcode already has a donation listed. If so, it will update the number of donors + 1
+            if duplicate_donor_zipCode[i] not in zipcodes:
                 zipcodes[duplicate_donor_zipCode[i]] = numOfRepeatDonors
                 transaction_amounts[duplicate_donor_zipCode[i]] = int(duplicate_donor_transaction_amt[i])
             else:
                 zipcodes[duplicate_donor_zipCode[i]] += 1
                 transaction_amounts[duplicate_donor_zipCode[i]] += int(duplicate_donor_transaction_amt[i])
-
             transaction_amounts_list.append(dupeList[i][14])
+            f.write(str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + str(transaction_amounts[dupeList[i][10][:5]]) + "|" + str(zipcodes[dupeList[i][10][:5]])+'\n')
+            # print str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + str(transaction_amounts[dupeList[i][10][:5]]) + "|" + str(zipcodes[dupeList[i][10][:5]])
 
-            print str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + str(transaction_amounts[dupeList[i][10][:5]]) + "|" + str(zipcodes[dupeList[i][10][:5]])
-
-            # print duplicate_donor_cmte_ID[i] + " " + duplicate_donor_zipCode[i] + " " + duplicate_donor_transaction_dt[i] + " " + duplicate_donor_name[i] + " " + duplicate_donor_transaction_amt[i]
-
-
-        elif duplicate_donor_cmte_ID.count(duplicate_donor_cmte_ID[i]) > 1: #Multiple contributions to the same CMTE_ID but not from the same ZIP CODE
-
+        #Multiple contributions to the same CMTE_ID but not from the same ZIP CODE
+        elif duplicate_donor_cmte_ID.count(duplicate_donor_cmte_ID[i]) > 1:
             transaction_amounts_list.append(dupeList[i][14])
-            print str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + dupeList[i][14] + "|" + str(numOfRepeatDonors)
-            # print duplicate_donor_cmte_ID[i] + " " + duplicate_donor_zipCode[i] + " " + duplicate_donor_transaction_dt[i] + " " + duplicate_donor_name[i] + " " + duplicate_donor_transaction_amt[i]
+            f.write(str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + dupeList[i][14] + "|" + str(numOfRepeatDonors) + '\n')
+            # print str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + dupeList[i][14] + "|" + str(numOfRepeatDonors)
 
-
-        else: #Just one duplicate donation from these zip codes
+        #Just one duplicate donation from these zip codes
+        else:
             transaction_amounts_list.append(dupeList[i][14])
-            print str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + dupeList[i][14] + "|" + str(numOfRepeatDonors)
-            # print duplicate_donor_cmte_ID[i] + " " + duplicate_donor_zipCode[i] + " " + duplicate_donor_transaction_dt[i] + " " + duplicate_donor_name[i] + " " + duplicate_donor_transaction_amt[i]
+            f.write(str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + dupeList[i][14] + "|" + str(numOfRepeatDonors)+'\n')
+            # print str(dupeList[i][0]) + "|" + str(dupeList[i][10][:5]) + "|" + str(dupeList[i][13][-4:]) + "|" + percentileCalculator(percentile, len(transaction_amounts_list), transaction_amounts_list) + "|" + dupeList[i][14] + "|" + str(numOfRepeatDonors)
 
-        # print transaction_amounts_list
         i +=1
 
-    # print duplicate_donor_cmte_ID
-    # print "OUTPUT: " + str(dupeList[0][0]) + "|" + str(dupeList[0][10][:5]) + "|" + str(dupeList[0][13][-4:]) + "|" + "percentile" + "|" + dupeList[0][14] + "|" + str(numOfRepeatDonors)
+    f.close() #close repeat_donors.txt
     return
 
 #####################################################
@@ -193,16 +192,16 @@ duplicate_donor_zipCode = []
 duplicate_donor_transaction_dt = []
 duplicate_donor_transaction_amt = []
 
-percentile = readPercentile(filename_percentile)
-
 ########################################################
 # FILE ACCESS & VARIABLES
 fileDir = os.path.dirname(os.path.realpath('__file__'))
 
-filename = os.path.join(fileDir, './Github/donation-analytics/insight_testsuite/tests/test_1/input/itcont.txt')
+filename = os.path.join(fileDir, './Github/donation-analytics/input/itcont.txt')
 filename = os.path.abspath(os.path.realpath(filename))
-filename_percentile = os.path.join(fileDir, './Github/donation-analytics/insight_testsuite/tests/test_1/input/percentile.txt')
+
+filename_percentile = os.path.join(fileDir, './Github/donation-analytics/input/percentile.txt')
 filename_percentile = os.path.abspath(os.path.realpath(filename_percentile))
+
 filename_output = os.path.join(fileDir, './Github/donation-analytics/output/repeat_donors.txt')
 filename_output = os.path.abspath(os.path.realpath(filename_output))
 
@@ -210,5 +209,5 @@ filename_output = os.path.abspath(os.path.realpath(filename_output))
 # START OF PROGRAM
 
 infoParse(filename)
-
-# repeatDonors(duplicate_donations)
+percentile = readPercentile(filename_percentile)
+repeatDonors(duplicate_donations)
