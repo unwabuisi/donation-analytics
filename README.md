@@ -5,9 +5,7 @@
 4. [Step Two](README.md#step-two)
 5. [Step Three](README.md#step-three)
 6. [Output Data](README.md#output-data)
-7. [Writing clean, scalable and well-tested code](README.md#writing-clean-scalable-and-well-tested-code)
-8. [Repo directory structure](README.md#repo-directory-structure)
-9. [Testing](README.md#testing)
+7. [Testing](README.md#testing)
 
 
 # Introduction
@@ -48,12 +46,12 @@ With all of the appropriate data split up into a bunch of lists, I iterated thro
 
 Iterating through the list, I kept a key value pair {ZipCode : numberOfDonors} and for zipcodes that had already been parsed, I simply incremented the number of donors.
 
-## Output Data
+# Output Data
 This part was fairly simple, as most of the heavy lifting was already done. The final output will look something like this:
 > **CMTE_ID|ZIP_CODE|CALENDAR YEAR OF DONATION(YYYY)|PERCENTILE|TOTAL AMOUNT OF $ CONTRIBUTED FROM ZIP_CODE|# OF DUPLICATE DONORS**
 ex: C00176214|98371|2017|30|280|28
 
-## Testing
+# Testing
 
 Python was the first programming language I learned and has been the one I feel most comfortable in. I tested the program with a few different data sets (up to 1.3GB) and for the most part it ran well. I did my best to keep the code clean and easy to understand, but there are a few things I should mention if you plan on running this on your machine.
 
