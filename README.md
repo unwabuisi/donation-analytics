@@ -6,8 +6,8 @@
 5. [Step Three](README.md#step-three)
 6. [Output Data](README.md#output-data)
 7. [Writing clean, scalable and well-tested code](README.md#writing-clean-scalable-and-well-tested-code)
-9. [Repo directory structure](README.md#repo-directory-structure)
-10. [Testing](README.md#testing)
+8. [Repo directory structure](README.md#repo-directory-structure)
+9. [Testing](README.md#testing)
 
 
 # Introduction
@@ -43,7 +43,7 @@ Each duplicate was put into a separate list, as well as having each specific ide
 I created a function to calculate the percentile using the [nearest-rank method](https://en.wikipedia.org/wiki/Percentile#The_nearest-rank_method). Creating the function to calculate the value was simply, but the challenge was understanding why it nearest-rank method worked and how I would implement it.
 
 
-## Step Three
+# Step Three
 With all of the appropriate data split up into a bunch of lists, I iterated through the duplicates list to find the records where donors in the same zip codes contributed to the same campaign more than once. This was the most challenging part of the problem. How could I compare the values in a list to other values in that same list, all while matching so many different conditions? After a few failed attempts, I re-stumbled on the idea of using Python's dictionary data structure to keep track of the two more important things **Zip Code** and **How many donations came from each zip code**.
 
 Iterating through the list, I kept a key value pair {ZipCode : numberOfDonors} and for zipcodes that had already been parsed, I simply incremented the number of donors.
