@@ -82,7 +82,7 @@ def repeatDonors(dupeList):
     zipcodes = {} #zipcodes and their number of donors are stored together so the number of repeat donors from a ZIPCODE can be counted
     i = 0
 
-    f = open(filename_output, 'w') #opens the repeat_donors.txt file
+    f = open(filename_output, "w") #opens repeat_donors.txt file
     while i < len(dupeList):
 
         # Same CTMID && ZIP CODE && YEAR (transaction_date)
@@ -195,19 +195,24 @@ duplicate_donor_transaction_amt = []
 ########################################################
 # FILE ACCESS & VARIABLES
 fileDir = os.path.dirname(os.path.realpath('__file__'))
+# fileDir = '/Users/unwabuisi/Documents/Github/donation-analytics' #comment out/delete
 
-filename = os.path.join(fileDir, './Github/donation-analytics/input/itcont.txt')
+filename = os.path.join(fileDir, 'input/itcont.txt')
 filename = os.path.abspath(os.path.realpath(filename))
+# filename = './Github/donation-analytics/insight_testsuite/tests/test_1/input/itcont.txt'#comment out/delete
 
-filename_percentile = os.path.join(fileDir, './Github/donation-analytics/input/percentile.txt')
+filename_percentile = os.path.join(fileDir, 'input/percentile.txt')
 filename_percentile = os.path.abspath(os.path.realpath(filename_percentile))
+# filename_percentile = './Github/donation-analytics/insight_testsuite/tests/test_1/input/percentile.txt'#comment out/delete
 
-filename_output = os.path.join(fileDir, './Github/donation-analytics/output/repeat_donors.txt')
+filename_output = os.path.join(fileDir, 'output/repeat_donors.txt')
 filename_output = os.path.abspath(os.path.realpath(filename_output))
+# filename_output = './Github/donation-analytics/insight_testsuite/tests/test_1/output/repeat_donors.txt'#comment out/delete
+
+
 
 ########################################################
 # START OF PROGRAM
-
 infoParse(filename)
 percentile = readPercentile(filename_percentile)
 repeatDonors(duplicate_donations)
