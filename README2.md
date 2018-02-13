@@ -13,12 +13,9 @@
 12. [FAQ](README.md#faq)
 
 # Introduction
-This was a Coding Challenge I participated in for the [Insight Data Engineering Program](http://xyz.insightdatascience.com/Insight_Data_Engineering_White_Paper.pdf). Here is the description:
->You’re a data engineer working for political consultants whose clients are cash-strapped >political candidates. They've asked for help analyzing loyalty trends in campaign >contributions, namely identifying areas of repeat donors and calculating how much they're >spending.
->The Federal Election Commission regularly publishes campaign contributions, and while you >don’t want to pull specific donors from those files — because using that information for >fundraising or commercial purposes is illegal — you want to identify areas (zip codes) that >could be sources of repeat campaign contributions.
+You’re a data engineer working for political consultants whose clients are cash-strapped political candidates. They've asked for help analyzing loyalty trends in campaign contributions, namely identifying areas of repeat donors and calculating how much they're spending.
 
-
-
+The Federal Election Commission regularly publishes campaign contributions, and while you don’t want to pull specific donors from those files — because using that information for fundraising or commercial purposes is illegal — you want to identify areas (zip codes) that could be sources of repeat campaign contributions. 
 
 # Challenge summary
 
@@ -27,13 +24,13 @@ For this challenge, we're asking you to take a file listing individual campaign 
 For each recipient, zip code and calendar year, calculate these three values for contributions coming from repeat donors:
 
 * total dollars received
-* total number of contributions received
+* total number of contributions received 
 * donation amount in a given percentile
 
 The political consultants, who are primarily interested in donors who have contributed in multiple years, are concerned about possible outliers in the data. So they have asked that your program allow for a variable percentile. That way the program could calculate the median (or the 50th percentile) in one run and the 99th percentile in another.
 
 Another developer has been placed in charge of building the graphical user
-interface with a dashboard showing the latest metrics on repeat donors, among other things.
+interface with a dashboard showing the latest metrics on repeat donors, among other things. 
 
 Your role on the project is to work on the data pipeline that will hand off the information to the front-end. As the backend data engineer, you do **not** need to display the data or work on the dashboard but you do need to provide the information.
 
@@ -41,13 +38,13 @@ You can assume there is another process that takes what is written to the output
 
 # Details of challenge
 
-You’re given two input files.
+You’re given two input files. 
 
 1. `percentile.txt`, holds a single value -- the percentile value (1-100) that your program will be asked to calculate.
 
-2. `itcont.txt`, has a line for each campaign contribution that was made on a particular date from a donor to a political campaign, committee or other similar entity.
+2. `itcont.txt`, has a line for each campaign contribution that was made on a particular date from a donor to a political campaign, committee or other similar entity. 
 
-Out of the many fields listed on the pipe-delimited lines of `itcont.txt` file, you’re primarily interested in the contributor's name, zip code associated with the donor, amount contributed, date of the transaction and ID of the recipient.
+Out of the many fields listed on the pipe-delimited lines of `itcont.txt` file, you’re primarily interested in the contributor's name, zip code associated with the donor, amount contributed, date of the transaction and ID of the recipient. 
 
 #### Identifying repeat donors
 For the purposes of this challenge, if a donor had previously contributed to any recipient listed in the `itcont.txt` file in any prior calendar year, that donor is considered a repeat donor. Also, for the purposes of this challenge, you can assume two contributions are from the same donor if the names and zip codes are identical.
@@ -55,7 +52,7 @@ For the purposes of this challenge, if a donor had previously contributed to any
 #### Calculations
 Each line of `itcont.txt` should be treated as a record. Your code should process each line as if that record was sequentially streaming into your program.  In other words, your program processes every line of `itcont.txt` in the same order as it is listed in the file.
 
-For each record that you identify as coming from a donor who has contributed to a campaign in a prior calendar year, calculate the running percentile of contributions from repeat donors, total number of transactions from repeat donors and total amount of donations streaming in from repeat donors so far for that calendar year, recipient and zip code.
+For each record that you identify as coming from a donor who has contributed to a campaign in a prior calendar year, calculate the running percentile of contributions from repeat donors, total number of transactions from repeat donors and total amount of donations streaming in from repeat donors so far for that calendar year, recipient and zip code. 
 
 Write the calculated fields out onto a pipe-delimited line and then print it to an output file named `repeat_donors.txt` in the same order as the donation appeared in the input file.
 
@@ -72,7 +69,7 @@ Also, while there are many fields in the file that may be interesting, below are
 * `ZIP_CODE`:  zip code of the contributor (we only want the first five digits/characters)
 * `TRANSACTION_DT`: date of the transaction
 * `TRANSACTION_AMT`: amount of the transaction
-* `OTHER_ID`: a field that denotes whether contribution came from a person or an entity
+* `OTHER_ID`: a field that denotes whether contribution came from a person or an entity 
 
 ### Input file considerations
 
@@ -82,7 +79,7 @@ Here are some considerations to keep in mind:
 2. Because the data set doesn't contain a unique donor id, you should use the combination of `NAME` and `ZIP_CODE` (again, first five digits) to identify a unique donor
 3. For the purposes of this challenge, you can assume the input file follows the data dictionary noted by the FEC for the 2015-current election years, although you should not assume the year field holds any particular value
 4. The transactions noted in the input file are not in any particular order, and in fact, can be out of order chronologically
-5. Because we are only interested in individual contributions, we only want records that have the field, `OTHER_ID`, set to empty. If the `OTHER_ID` field contains any other value, you should completely ignore and skip the entire record
+5. Because we are only interested in individual contributions, we only want records that have the field, `OTHER_ID`, set to empty. If the `OTHER_ID` field contains any other value, you should completely ignore and skip the entire record 
 6. Other situations you can completely ignore and skip an entire record:
 
 * If `TRANSACTION_DT` is an invalid date (e.g., empty, malformed)
@@ -97,14 +94,14 @@ Here are some considerations to keep in mind:
 
 For the  output file that your program will create, `repeat_donors.txt`, the fields on each line should be separated by a `|`
 
-The output should contain the same number of lines or records as the input data file, `itcont.txt`,  minus any records that were ignored as a result of the 'Input file considerations' and any records you determine did not originate from a repeat donor.
+The output should contain the same number of lines or records as the input data file, `itcont.txt`,  minus any records that were ignored as a result of the 'Input file considerations' and any records you determine did not originate from a repeat donor. 
 
 Each line of this file should contain these fields:
 
 * recipient of the contribution (or `CMTE_ID` from the input file)
 * 5-digit zip code of the contributor (or the first five characters of the `ZIP_CODE` field from the input file)
 * 4-digit year of the contribution
-* running percentile of contributions received from repeat donors to a recipient streamed in so far for this zip code and calendar year. Percentile calculations should be rounded to the whole dollar (drop anything below $.50 and round anything from $.50 and up to the next dollar)
+* running percentile of contributions received from repeat donors to a recipient streamed in so far for this zip code and calendar year. Percentile calculations should be rounded to the whole dollar (drop anything below $.50 and round anything from $.50 and up to the next dollar) 
 * total amount of contributions received by recipient from the contributor's zip code streamed in so far in this calendar year from repeat donors
 * total number of transactions received by recipient from the contributor's zip code streamed in so far this calendar year from repeat donors
 
@@ -138,7 +135,7 @@ Suppose your input files contained only the following few lines. Note that the f
 The single line on `percentile.txt` tells us that we need to compute the 30th percentile for the stream in `itcont.txt`. If we were to pick the relevant fields from each line, here is what we would record for each line.
 
 **`itcont.txt`**
-
+ 
     1.
     CMTE_ID: C00629618
     NAME: PEREZ, JOHN A
@@ -155,7 +152,7 @@ The single line on `percentile.txt` tells us that we need to compute the 30th pe
     TRANSACTION_AMT: 384
     OTHER_ID: empty
 
-    3.
+    3. 
     CMTE_ID: C00384818
     NAME: ABBOTT, JOSEPH
     ZIP_CODE: 02895
@@ -170,7 +167,7 @@ The single line on `percentile.txt` tells us that we need to compute the 30th pe
     TRANSACTION_DT: 01312017
     TRANSACTION_AMT: 230
     OTHER_ID: empty
-
+  
     5.
     CMTE_ID: C00177436
     NAME: JEROME, CHRISTOPHER
@@ -181,7 +178,7 @@ The single line on `percentile.txt` tells us that we need to compute the 30th pe
 
     6.
     CMTE_ID: C00384516
-    NAME: ABBOTT, JOSEPH
+    NAME: ABBOTT, JOSEPH 
     ZIP_CODE: 02895
     TRANSACTION_DT: 01122018
     TRANSACTION_AMT: 333
@@ -196,7 +193,7 @@ The single line on `percentile.txt` tells us that we need to compute the 30th pe
     OTHER_ID: empty
 
 
-In processing the `itcont.txt` file line by line, we would ignore the first record because the `OTHER_ID` field contains data and is not empty.
+In processing the `itcont.txt` file line by line, we would ignore the first record because the `OTHER_ID` field contains data and is not empty. 
 
 The next four records don't include any contributions from repeat donors so we ignore them.
 
@@ -206,7 +203,7 @@ So now, we would look for any contributions from repeat donors for recipient `C0
 
 * the total number of contributions from repeat donors is `1`
 * the total dollar amount of contributions is `333`
-* the 30th percentile contribution is `333`
+* the 30th percentile contribution is `333` 
 
 The seventh record also is for a repeat donor because `SABOURIN, JAMES`, who contributed Jan. 31, 2018, also contributed Jan. 31, 2017.
 
@@ -220,7 +217,7 @@ Processing all of the input lines in `itcont.txt`, the entire contents of `repea
 
     C00384516|02895|2018|333|333|1
     C00384516|02895|2018|333|717|2
-
+    
 
 ## Writing clean, scalable and well-tested code
 
@@ -240,7 +237,7 @@ If your solution requires additional libraries, environments, or dependencies, y
 
 The directory structure for your repo should look like this:
 
-    ├── README.md
+    ├── README.md 
     ├── run.sh
     ├── src
     │   └── donation-analytics.py
@@ -274,7 +271,7 @@ The tests are stored simply as text files under the `insight_testsuite/tests` fo
 
 You can run the test with the following command from within the `insight_testsuite` folder:
 
-    insight_testsuite~$ ./run_tests.sh
+    insight_testsuite~$ ./run_tests.sh 
 
 On a failed test, the output of `run_tests.sh` should look like:
 
@@ -294,22 +291,22 @@ Your submission must pass at least the provided test in order to pass the coding
 
 ## Instructions to submit your solution
 * To submit your entry please use the link you received in your coding challenge invite email
-* You will only be able to submit through the link one time
-* Do NOT attach a file - we will not admit solutions which are attached files
+* You will only be able to submit through the link one time 
+* Do NOT attach a file - we will not admit solutions which are attached files 
 * Use the submission box to enter the link to your GitHub repo or Bitbucket ONLY
 * Link to the specific repo for this project, not your general profile
 * Put any comments in the README inside your project repo, not in the submission box
-* We are unable to accept coding challenges that are emailed to us
+* We are unable to accept coding challenges that are emailed to us 
 
 # FAQ
 
 Here are some common questions we've received. If you have additional questions, please email us at `cc@insightdataengineering.com` and we'll answer your questions as quickly as we can (during PST business hours), and update this FAQ. Again, only contact us after you have read through the Readme and FAQ one more time and cannot find the answer to your question.
 
-### Why are you asking us to assume the data is streaming in?
+### Why are you asking us to assume the data is streaming in? 
 As a data engineer, you may want to take into consideration future needs. For instance, the team working on the dashboard may want to re-use the streaming functionality used to create `repeat_donors.txt` file in the future to show a running percentile value and total dollar amount of contributions as they arrive in real-time. It might prove useful in assessing the success of a candidate's fundraising efforts at any moment in time.
 
 ### What do I do when the data is listed out of order?
-Because donations could appear in any order in the input file, there could be a case where you don't know a contributor is a repeat donor until you encounter the second donation.
+Because donations could appear in any order in the input file, there could be a case where you don't know a contributor is a repeat donor until you encounter the second donation. 
 
 In some cases, the second donation that came later in the file may have a transaction date that is for a previous calendar year. In that case, you should only identify the later donation as coming from a repeat donor and output the requested calculations for that calendar year, zip code and recipient. In this case, there would be no need to revise any lines you may have already outputted earlier.
 
@@ -330,7 +327,7 @@ In some cases, the second donation that came later in the file may have a transa
 
     C00384516|02895|2017|230|230|1
 
-### The FEC website describes the TRANSCTION_AMT field as NUMBER(14, 2). What does that mean?
+### The FEC website describes the TRANSCTION_AMT field as NUMBER(14, 2). What does that mean? 
 
 NUMBER(14,2) means the field is capable of holding a number with a maximum precision of 14 and maximum scale of 2. For instance, both 10000.99 and 10000 would be valid transaction amounts.
 
@@ -344,13 +341,13 @@ No, you may use a public repo, there is no need to purchase a private repo. You 
 It's important that your implementation scales to handle large amounts of data. While many of our Fellows have experience with R and Matlab, applicants have found that these languages are unable to process data in a scalable fashion, so you must consider another language.
 
 ### May I use distributed technologies like Hadoop or Spark?
-Your code will be tested on a single machine, so using these technologies will negatively impact your solution. We're not testing your knowledge on distributed computing, but rather on computer science fundamentals and software engineering best practices.
+Your code will be tested on a single machine, so using these technologies will negatively impact your solution. We're not testing your knowledge on distributed computing, but rather on computer science fundamentals and software engineering best practices. 
 
 ### What sort of system should I use to run my program on (Windows, Linux, Mac)?
 You may write your solution on any system, but your source code should be portable and work on all systems. Additionally, your `run.sh` must be able to run on either Unix or Linux, as that's the system that will be used for testing. Linux machines are the industry standard for most data engineering teams, so it is helpful to be familiar with this. If you're currently using Windows, we recommend installing a virtual Unix environment, such as VirtualBox or VMWare, and using that to develop your code. Otherwise, you also could use tools, such as Cygwin or Docker, or a free online IDE such as Cloud9.
 
 ### How fast should my program run?
-While there are no strict performance guidelines to this coding challenge, we will consider the amount of time your program takes when grading the challenge. Therefore, you should design and develop your program in the optimal way (i.e. think about time and space complexity instead of trying to hit a specific run time value).
+While there are no strict performance guidelines to this coding challenge, we will consider the amount of time your program takes when grading the challenge. Therefore, you should design and develop your program in the optimal way (i.e. think about time and space complexity instead of trying to hit a specific run time value). 
 
 ### Can I use pre-built packages, modules, or libraries?
 This coding challenge can be completed without any "exotic" packages. While you may use publicly available packages, modules, or libraries, you must document any dependencies in your accompanying README file. When we review your submission, we will download these libraries and attempt to run your program. If you do use a package, you should always ensure that the module you're using works efficiently for the specific use-case in the challenge, since many libraries are not designed for large amounts of data.
